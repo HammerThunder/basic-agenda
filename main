@@ -1,0 +1,111 @@
+class Agenda {
+    private val events = mutableListOf<Event>()
+    private val contacts = mutableListOf<Contact>()
+
+    fun addEvent(event: Event) {
+        events.add(event)
+    }
+
+    fun removeEvent(name: String) {
+        val event = events.find { it.name == name }
+        events.remove(event)
+    }
+
+    fun getEvents(): List<Event> {
+        return events.toList()
+    }
+
+    fun addContact(contact: Contact) {
+        contacts.add(contact)
+    }
+
+    fun removeContact(name: String) {
+        val contact = contacts.find { it.name == name }
+        contacts.remove(contact)
+    }
+
+    fun getContacts(): List<Contact> {
+        return contacts.toList()
+    }
+
+    fun searchContacts(name: String): List<Contact> {
+        return contacts.filter { it.name.contains(name, ignoreCase = true) }
+    }
+
+    fun searchEvents(name: String): List<Event> {
+        return events.filter { it.name.contains(name, ignoreCase = true) }
+    }
+}
+
+data class Event(val name: String, val location: String, val startTime: Int, val endTime: Int)
+
+data class Contact(val name: String, val tel: Int, val email: String, val bday: Int)
+
+fun displayContacts(contacts: List<Contact>) {
+    for ((index, contact) in contacts.withIndex()) {
+        println("$index. $contact")
+    }
+}
+
+fun main() {
+    val agenda = Agenda()
+
+    while (true) {
+        println("1. Adicionar Evento")
+        println("2. Remover evento")
+        println("3. Adicionar Contato")
+        println("4. Remover contato")
+        println("5. Listar Eventos")
+        println("6. Listar Contactos")
+        println("7. Sair")
+
+        val input = readLine()!!.toInt()
+        when (input) {
+            1 -> {
+                println("Dê um Nome ao Evento:")
+                val name = readLine()!!
+                println("Local do Evento:")
+                val location = readLine()!!
+                println("Escreva o Horário Inicial do Evento (formato 24hs):")
+                val startTime = readLine()!!.toLong()
+                println("Escreva o Horário Final do Evento (formato 24hs):")
+                val endTime = readLine()!!.toLong()
+                val event = Event(name, location, startTime, endTime)
+                agenda.addEvent(event)
+            }
+            2 -> {
+                println("Entre o Nome do Evento a ser removido:")
+                val name = readLine()!!
+                agenda.removeEvent(name)
+            }
+            3 -> {
+                println("Dê um Nome ao Contato:")
+                val name = readLine()!!
+                println("Telefone do Contato:")
+                val tel = readLine()!!
+                println("Email do Contato:")
+                val email = readLine()!!
+                println("Entre a Data de Nascimento do Contato (formato DD/MM/AA, somente números):")
+                val bday = readLine()!!
+                val contact = Contact(name, tel, email, bday)
+                agenda.addContact(contact)
+            }
+            4 -> {
+                println("Escreva o Nome do Contato a ser removido:")
+                val name = readLine()!!
+                agenda.removeContact(name)
+            }
+            5 -> {
+                val events = agenda.getEvents()
+                displayEvents(events)
+            }
+            6 -> {
+                val contacts = agenda.getContacts()
+                displayContacts(contacts)
+            }
+            7 -> {
+                break
+            }
+        }
+    }
+}
